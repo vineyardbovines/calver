@@ -1,12 +1,14 @@
 {
-  "name": "@vineyardbovines/release-it-calver",
-  "type": "module",
-  "version": "2025-10.1",
+  "name": "@vineyardbovines/calver",
   "description": "calendar versioning (calver) plugins for release-it and auto-changelog",
-  "main": "index.js",
+  "version": "2025.10.0",
+  "type": "module",
+  "types": "calver.d.ts",
   "files": [
-    "plugin.js",
-    "changelog-template.hbs"
+    "calver.js",
+    "calver.d.ts",
+    "plugin",
+    "template"
   ],
   "repository": {
     "type": "git",
@@ -31,23 +33,5 @@
   },
   "peerDependencies": {
     "release-it": ">=19"
-  },
-  "release-it": {
-    "git": {
-      "commitMessage": "release: v${version}",
-      "tagName": "v${version}",
-      "requireCleanWorkingDir": false
-    },
-    "github": {
-      "release": true
-    },
-    "npm": {
-      "publish": true
-    },
-    "plugins": {
-      "./index.js": {
-        "cycle": "month"
-      }
-    }
   }
 }

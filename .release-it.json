@@ -19,6 +19,8 @@
     "after:release": "git push origin HEAD"
   },
   "plugins": {
-    "./index.js": {}
+    "./plugin/index.js": {
+      "cycle": "month"
+    }
   }
 }

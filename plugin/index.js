@@ -1,7 +1,11 @@
 import fs from "node:fs";
 import path from "node:path";
-import * as calver from "calver";
 import { Plugin } from "release-it";
+import * as calver from "../calver.js";
+
+const DEFAULT_CYCLE = "month";
+const DELIMITER = ".";
+const PRERELEASE_DELIMITER = "-";
 
 /**
  * CalVerPlugin - a release-it plugin for managing version numbers using calver
@@ -19,22 +23,26 @@ export default class CalVerPlugin extends Plugin {
 
     this.setContext({
       latestVersion: pkg.version,
-      cycle: ctx.cycle ?? "month",
-      delimiters: {
-        date: ctx.delimiters?.date ?? "-",
-        minor: ctx.delimiters?.minor ?? ".",
-        prerelease: ctx.delimiters?.prerelease ?? "-",
-      },
+      cycle: ctx.cycle ?? DEFAULT_CYCLE,
+    });
+  }
+
+  getInitialOptions(options, pluginName) {
+    return Object.assign({}, options[pluginName], {
+      npmPublish: options.npm?.publish,
     });
   }
 
   getIncrementedVersion({ latestVersion, isPreRelease, preReleaseId }) {
-    const { cycle, delimiters } = this.getContext();
+    const { cycle } = this.getContext();
+    console.log("clean", calver.clean(latestVersion));
+    console.log("cycle", cycle);
 
-    const nextCalVer = calver.cycle(calver.clean(latestVersion), { cycle: cycle });
+    const nextCalVer = calver.cycle(calver.clean(latestVersion), { cycle });
+    console.log("nextCalVer", nextCalVer);
 
     if (isPreRelease) {
-      const tagPrefix = `${delimiters.prerelease}${preReleaseId}`;
+      const tagPrefix = `${PRERELEASE_DELIMITER}${preReleaseId}`;
       const dateChanged = calver.ot(latestVersion, nextCalVer, { cycle: cycle });
 
       // reset prerelease tag version if the date changed or the current version doesn't have the same passed prerelease id
@@ -67,13 +75,11 @@ export default class CalVerPlugin extends Plugin {
    * @param preReleaseId - prerelease id to increment
    */
   _incrementPreReleaseTag(latestVersion, preReleaseId) {
-    const { delimiters } = this.getContext();
-
-    const tagPrefix = `${delimiters.prerelease}${preReleaseId}`;
+    const tagPrefix = `${PRERELEASE_DELIMITER}${preReleaseId}`;
 
     const [_, tagVersion] = latestVersion.split(tagPrefix);
 
-    const cleanTagVersion = tagVersion.replace(".", "");
+    const cleanTagVersion = tagVersion.replace(DELIMITER, "");
 
     const nextTagVersion = String(Number(cleanTagVersion + 1));
 
