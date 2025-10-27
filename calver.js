@@ -1,5 +1,5 @@
-const CALVER_RE_SYNTAX = /^[0-9]{4}(-[0-9]{1,2}(-[0-9]{1,2})?)?(\.[0-9]+)?$/;
-const CALVER_SEARCH_RE_SYNTAX = /[0-9]{4}(-[0-9]{1,2}(-[0-9]{1,2})?)?(\.[0-9]+)?/;
+const CALVER_RE_SYNTAX = /^[0-9]{4}([.-][0-9]{1,2}([.-][0-9]{1,2})?)?([.-][0-9]+)?$/;
+const CALVER_SEARCH_RE_SYNTAX = /[0-9]{4}([.-][0-9]{1,2}([.-][0-9]{1,2})?)?([.-][0-9]+)?/;
 const CALVER_CALENDAR_PORTION_SEPARATOR = ".";
 const CALVER_MINOR_PORTION_SEPARATOR = ".";
 const CALVER_NUMBER_OF_WEEKS_IN_A_YEAR = 54;
@@ -184,112 +184,163 @@ export function parse(str, settings = { cycle: "auto" }) {
     minor: 0,
   };
 
-  // Split by separator to get all parts
-  const allParts = str.slice(4).split(/[.-]/);
-
-  // Determine which parts are date vs minor based on cycle and part count
-  let dateParts = [str.slice(0, 4)]; // Start with year
-  let minorPart = null;
-
-  if (allParts.length > 0 && allParts[0] === "") {
-    allParts.shift(); // Remove empty string if starts with separator
-  }
-
-  // Logic to determine date parts vs minor version
-  if (settings.cycle === "auto") {
-    // In auto mode, use heuristics:
-    // - If we have 3+ parts, last one is minor if previous parts form valid date
-    // - If we have 2 parts, check if it could be year.month, year.week, or year.minor
-    if (allParts.length >= 3) {
-      // Assume format like 2025.10.1.5 or 2025.10.1
-      // Last part is minor if we have 4 parts total (year + 3)
-      if (allParts.length === 4) {
-        dateParts.push(...allParts.slice(0, 3));
-        minorPart = allParts[3];
-      } else {
-        dateParts.push(...allParts);
-      }
-    } else {
-      dateParts.push(...allParts);
-    }
-  } else if (settings.cycle === "year") {
-    // Year cycle: only expects minor version after year
-    if (allParts.length === 1) {
-      minorPart = allParts[0];
-    } else if (allParts.length > 1) {
+  // Get everything after the year
+  const afterYear = str.slice(4);
+  if (!afterYear) {
+    // Just a year
+    if (!["auto", "year"].includes(settings.cycle)) {
       throw new Error("Version and cycle mismatch.");
     }
-  } else if (settings.cycle === "month" || settings.cycle === "week") {
-    // Month/week cycle: expects year.month[.minor] or year.week[.minor]
-    if (allParts.length === 1) {
-      dateParts.push(allParts[0]);
-    } else if (allParts.length === 2) {
-      dateParts.push(allParts[0]);
-      minorPart = allParts[1];
+    return result;
+  }
+
+  // Split by separator and filter empty strings
+  const parts = afterYear.split(/[.-]/).filter((p) => p !== "");
+
+  if (parts.length === 0) {
+    if (!["auto", "year"].includes(settings.cycle)) {
+      throw new Error("Version and cycle mismatch.");
+    }
+    return result;
+  }
+
+  // Determine parsing based on cycle
+  if (settings.cycle === "year") {
+    // year cycle: year.minor
+    if (parts.length === 1) {
+      result.minor = parseInt(parts[0], 10);
+    } else {
+      throw new Error("Version and cycle mismatch.");
+    }
+  } else if (settings.cycle === "month") {
+    // month cycle: year.month or year.month.minor
+    if (parts.length === 1) {
+      result.month = parseInt(parts[0], 10);
+      if (result.month > CALVER_NUMBER_OF_MONTHS_IN_A_YEAR) {
+        throw new Error(
+          "The month " + result.month.toString() + " is not a valid month number for a year."
+        );
+      }
+    } else if (parts.length === 2) {
+      result.month = parseInt(parts[0], 10);
+      result.minor = parseInt(parts[1], 10);
+      if (result.month > CALVER_NUMBER_OF_MONTHS_IN_A_YEAR) {
+        throw new Error(
+          "The month " + result.month.toString() + " is not a valid month number for a year."
+        );
+      }
+    } else {
+      throw new Error("Version and cycle mismatch.");
+    }
+  } else if (settings.cycle === "week") {
+    // week cycle: year.week or year.week.minor
+    if (parts.length === 1) {
+      result.week = parseInt(parts[0], 10);
+      if (result.week > CALVER_NUMBER_OF_WEEKS_IN_A_YEAR + 1) {
+        throw new Error(
+          "The week " + result.week.toString() + " is not a valid week number for a year."
+        );
+      }
+    } else if (parts.length === 2) {
+      result.week = parseInt(parts[0], 10);
+      result.minor = parseInt(parts[1], 10);
+      if (result.week > CALVER_NUMBER_OF_WEEKS_IN_A_YEAR + 1) {
+        throw new Error(
+          "The week " + result.week.toString() + " is not a valid week number for a year."
+        );
+      }
     } else {
       throw new Error("Version and cycle mismatch.");
     }
   } else if (settings.cycle === "day") {
-    // Day cycle: expects year.month.day[.minor]
-    if (allParts.length === 2) {
-      dateParts.push(...allParts);
-    } else if (allParts.length === 3) {
-      dateParts.push(allParts[0], allParts[1]);
-      minorPart = allParts[2];
-    } else if (allParts.length === 4) {
-      dateParts.push(allParts[0], allParts[1], allParts[2]);
-      minorPart = allParts[3];
+    // day cycle: year.month.day or year.month.day.minor
+    if (parts.length === 2) {
+      result.month = parseInt(parts[0], 10);
+      result.day = parseInt(parts[1], 10);
+      if (result.month > CALVER_NUMBER_OF_MONTHS_IN_A_YEAR) {
+        throw new Error(
+          "The month " + result.month.toString() + " is not a valid month number for a year."
+        );
+      }
+      if (result.day > CALVER_NUMBER_OF_DAYS_IN_A_MONTH) {
+        throw new Error(
+          "The day " + result.day.toString() + " is not a valid day number for a month."
+        );
+      }
+    } else if (parts.length === 3) {
+      result.month = parseInt(parts[0], 10);
+      result.day = parseInt(parts[1], 10);
+      result.minor = parseInt(parts[2], 10);
+      if (result.month > CALVER_NUMBER_OF_MONTHS_IN_A_YEAR) {
+        throw new Error(
+          "The month " + result.month.toString() + " is not a valid month number for a year."
+        );
+      }
+      if (result.day > CALVER_NUMBER_OF_DAYS_IN_A_MONTH) {
+        throw new Error(
+          "The day " + result.day.toString() + " is not a valid day number for a month."
+        );
+      }
     } else {
       throw new Error("Version and cycle mismatch.");
     }
-  }
+  } else if (settings.cycle === "auto") {
+    // Auto mode: infer from structure
+    if (parts.length === 1) {
+      // Could be year.minor or year.month/week
+      const value = parseInt(parts[0], 10);
+      if (value <= CALVER_NUMBER_OF_MONTHS_IN_A_YEAR) {
+        // Ambiguous: could be month or minor
+        // Default to month for values 1-12
+        result.month = value;
+      } else if (value <= CALVER_NUMBER_OF_WEEKS_IN_A_YEAR) {
+        // Likely a week number
+        result.week = value;
+      } else {
+        // Must be a minor version
+        result.minor = value;
+      }
+    } else if (parts.length === 2) {
+      const first = parseInt(parts[0], 10);
+      const second = parseInt(parts[1], 10);
 
-  // Parse minor version
-  if (minorPart !== null) {
-    result.minor = parseInt(minorPart, 10);
-  }
+      if (
+        first <= CALVER_NUMBER_OF_MONTHS_IN_A_YEAR &&
+        second <= CALVER_NUMBER_OF_DAYS_IN_A_MONTH
+      ) {
+        // year.month.day format
+        result.month = first;
+        result.day = second;
+      } else if (first <= CALVER_NUMBER_OF_MONTHS_IN_A_YEAR) {
+        // year.month.minor format
+        result.month = first;
+        result.minor = second;
+      } else if (first <= CALVER_NUMBER_OF_WEEKS_IN_A_YEAR) {
+        // year.week.minor format
+        result.week = first;
+        result.minor = second;
+      } else {
+        throw new Error("Invalid calver string: invalid date portion.");
+      }
+    } else if (parts.length === 3) {
+      // year.month.day.minor
+      result.month = parseInt(parts[0], 10);
+      result.day = parseInt(parts[1], 10);
+      result.minor = parseInt(parts[2], 10);
 
-  if (dateParts.length === 1) {
-    if (!["auto", "year"].includes(settings.cycle)) {
-      throw new Error("Version and cycle mismatch.");
+      if (result.month > CALVER_NUMBER_OF_MONTHS_IN_A_YEAR) {
+        throw new Error(
+          "The month " + result.month.toString() + " is not a valid month number for a year."
+        );
+      }
+      if (result.day > CALVER_NUMBER_OF_DAYS_IN_A_MONTH) {
+        throw new Error(
+          "The day " + result.day.toString() + " is not a valid day number for a month."
+        );
+      }
+    } else {
+      throw new Error("Invalid calver string: invalid date portion.");
     }
-  } else if (dateParts.length === 2) {
-    if (!["auto", "month", "week"].includes(settings.cycle)) {
-      throw new Error("Version and cycle mismatch.");
-    }
-
-    const key = settings.cycle === "week" ? "week" : "month";
-    const value = parseInt(dateParts[1], 10);
-
-    if (key === "week" && value > CALVER_NUMBER_OF_WEEKS_IN_A_YEAR + 1) {
-      throw new Error("The week " + value.toString() + " is not a valid week number for a year.");
-    }
-
-    if (key === "month" && value > CALVER_NUMBER_OF_MONTHS_IN_A_YEAR) {
-      throw new Error("The month " + value.toString() + " is not a valid month number for a year.");
-    }
-
-    result[key] = value;
-  } else if (dateParts.length === 3) {
-    if (!["auto", "day"].includes(settings.cycle)) {
-      throw new Error("Version and cycle mismatch.");
-    }
-
-    const month = parseInt(dateParts[1], 10);
-    const day = parseInt(dateParts[2], 10);
-
-    if (month > CALVER_NUMBER_OF_MONTHS_IN_A_YEAR) {
-      throw new Error("The month " + month.toString() + " is not a valid month number for a year.");
-    }
-
-    if (day > CALVER_NUMBER_OF_DAYS_IN_A_MONTH) {
-      throw new Error("The day " + day.toString() + " is not a valid day number for a month.");
-    }
-
-    result.month = month;
-    result.day = day;
-  } else {
-    throw new Error("Invalid calver string: invalid date portion.");
   }
 
   return result;
