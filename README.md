@@ -19,7 +19,7 @@ In your release-it configuration:
 // .release-it.json
 {
   "plugins": {
-    "@vineyardbovines/calver": {
+    "@vineyardbovines/calver/plugin": {
       "cycle": "month"
     }
   }
@@ -47,7 +47,7 @@ The plugin will automatically increment the tag version if you've set `prereleas
 
 ### auto-changelog
 
-In your auto-changelog configuration, you'll have to copy/paste `changelog-template.hbs` into your project and then update your auto-changelog config:
+In your auto-changelog configuration, you'll have to copy/paste `template/changelog-template.hbs` into your project and then update your auto-changelog config:
 
 ```json
 // .auto-changelog
