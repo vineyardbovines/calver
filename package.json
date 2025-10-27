@@ -1,7 +1,7 @@
 {
   "name": "@vineyardbovines/calver",
   "description": "calendar versioning (calver) plugins for release-it and auto-changelog",
-  "version": "2025.10.1",
+  "version": "2025.10.2",
   "type": "module",
   "types": "calver.d.ts",
   "files": [
