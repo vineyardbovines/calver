@@ -26,6 +26,17 @@ In your release-it configuration:
 }
 ```
 
+If publishing to NPM:
+
+```json
+{
+  "npm": {
+    "publish": true,
+    "ignoreVersion": true
+  }
+}
+```
+
 Available plugin options for version customization:
 
 **The format of version is always separated by `.` (dot)**. This is so that NPM will accept the version; versions split with other delimiters like `-` are invalid. The exception is prereleases, which are separated by `-` (dash).

@@ -8,7 +8,8 @@
     "requireCleanWorkingDir": false
   },
   "npm": {
-    "publish": true
+    "publish": true,
+    "ignoreVersion": true
   },
   "github": {
     "release": true,
