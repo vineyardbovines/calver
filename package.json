@@ -1,0 +1,53 @@
+{
+  "name": "@vineyardbovines/release-it-calver",
+  "type": "module",
+  "version": "2025-10.1",
+  "description": "calendar versioning (calver) plugins for release-it and auto-changelog",
+  "main": "index.js",
+  "files": [
+    "plugin.js",
+    "changelog-template.hbs"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vineyardbovines/calver.git"
+  },
+  "keywords": [
+    "calver",
+    "release-it",
+    "auto-changelog"
+  ],
+  "author": "Spence Pope <spencer@thepope.dev>",
+  "license": "MIT",
+  "scripts": {
+    "format": "bunx biome check --write --unsafe --no-errors-on-unmatched --files-ignore-unknown=true .",
+    "release": "bunx release-it --ci"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.3.1",
+    "auto-changelog": "^2.5.0",
+    "calver": "^24.1.0",
+    "release-it": "^19.0.5"
+  },
+  "peerDependencies": {
+    "release-it": ">=19"
+  },
+  "release-it": {
+    "git": {
+      "commitMessage": "release: v${version}",
+      "tagName": "v${version}",
+      "requireCleanWorkingDir": false
+    },
+    "github": {
+      "release": true
+    },
+    "npm": {
+      "publish": true
+    },
+    "plugins": {
+      "./index.js": {
+        "cycle": "month"
+      }
+    }
+  }
+}

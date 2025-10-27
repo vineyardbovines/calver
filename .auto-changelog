@@ -1,0 +1,10 @@
+{
+  "output": "CHANGELOG.md",
+  "template": "./changelog-template.hbs",
+  "package": "./package.json",
+  "unreleased": true,
+  "commitLimit": false,
+  "ignoreCommitPattern": "^release:",
+  "sortCommits": "date-desc",
+  "tagPattern": "^\\d{4}\\.\\d{1,2}\\.\\d+(-[a-zA-Z0-9.-]+)?$"
+}

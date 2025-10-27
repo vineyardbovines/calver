@@ -1,0 +1,24 @@
+{
+  "$schema": "https://unpkg.com/release-it@19/schema/release-it.json",
+  "git": {
+    "commit": true,
+    "commitMessage": "release: ${version} [skip ci]",
+    "tag": true,
+    "tagName": "${version}",
+    "requireCleanWorkingDir": false
+  },
+  "npm": {
+    "publish": true
+  },
+  "github": {
+    "release": true,
+    "releaseName": "${version}"
+  },
+  "hooks": {
+    "after:bump": "bunx auto-changelog",
+    "after:release": "git push origin HEAD"
+  },
+  "plugins": {
+    "./index.js": {}
+  }
+}
