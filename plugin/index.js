@@ -62,12 +62,6 @@ export default class CalVerPlugin extends Plugin {
     return this.getIncrementedVersion({ latestVersion, isPreRelease, preReleaseId });
   }
 
-  bump(version) {
-    const pkg = this._getPkgJson();
-    pkg.version = version;
-    fs.writeFileSync(CalVerPlugin.pkgPath, JSON.stringify(pkg, null, 2));
-  }
-
   /**
    * incrementPreReleaseTag - increment the prerelease tag version
    *
