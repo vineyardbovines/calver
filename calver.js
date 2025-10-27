@@ -9,6 +9,7 @@ export const CALVER_CYCLES = ["auto", "year", "month", "week", "day"];
 
 export function clean(str) {
   const result = str.match(CALVER_SEARCH_RE_SYNTAX);
+  console.log("result", str);
 
   if (!result) {
     throw new Error("Failed to clean the text that was supposed to contain a calver version.");
