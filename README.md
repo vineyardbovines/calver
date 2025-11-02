@@ -6,7 +6,7 @@ Calendar Versioning (CalVer) plugin for [release-it](https://github.com/release-
 
 ```bash
 # with package manager of choice
-bun add -D @vineyardbovines/release-it-calver
+ibun add -D @vineyardbovines/calver
 # install peers
 bun add -D release-it auto-changelog
 ```
