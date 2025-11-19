@@ -4,12 +4,18 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Calendar Versioning (CalVer)](https://calver.org/).
 
+### [2025.11.2](https://github.com/vineyardbovines/calver/compare/2025.11.1...2025.11.2)
+
+### 🧹 Chores
+
+-  update changelog formats [`dc2a149`](https://github.com/vineyardbovines/calver/commit/dc2a1493b1357922f52c7c6e1870961a83e4ad09)
 ### [2025.11.1](https://github.com/vineyardbovines/calver/compare/2025.10.3...2025.11.1)
 
 ### 🐛 Bug Fixes
 
 -  minor version reset [`d1eac3b`](https://github.com/vineyardbovines/calver/commit/d1eac3b1b76c9b3eff3ad99432648540be7e2502)
 -  local template location [`7c6dd65`](https://github.com/vineyardbovines/calver/commit/7c6dd6563693fcedc870fb51836474b5440f1feb)
+
 ### 🧹 Chores
 
 -  release-it config [`0f82c47`](https://github.com/vineyardbovines/calver/commit/0f82c471a42e451cb226b1df79157fef242758c4)
@@ -28,6 +34,7 @@ This project adheres to [Calendar Versioning (CalVer)](https://calver.org/).
 ### 🐛 Bug Fixes
 
 -  remove bump step from release-it plugin [`5350837`](https://github.com/vineyardbovines/calver/commit/535083718b3bfa1ea0b0f4914015127bafc645f5)
+
 ### 🧹 Chores
 
 -  readme [`cbdf22a`](https://github.com/vineyardbovines/calver/commit/cbdf22a405929aeecadf8bb45e32ce2c8c71c63b)
