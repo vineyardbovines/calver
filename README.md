@@ -4,11 +4,21 @@ Calendar Versioning (CalVer) plugin for [release-it](https://github.com/release-
 
 ## Usage
 
+This package has 3 functionalities: release-it plugin, auto-changelog template, and a fork of [node-calver](https://github.com/muratgozel/node-calver) that modifies the version calculation to expect a format NPM will accept.
+
 ```bash
 # with package manager of choice
 npm add -D @vineyardbovines/calver
 # install peers
 npm add -D release-it auto-changelog
+```
+
+### calver
+
+To use just the fork of node-calver, you can import the `calver` module and use the functions directly.
+
+```js
+import { clean, suffix, prefix, initial, nt, ot, cycle, valid, toCalVerString } from "@vineyardbovines/calver/calver";
 ```
 
 ### release-it
