@@ -21,7 +21,7 @@
   "hooks": {
     "after:bump": [
       "bunx auto-changelog -p --template ./template/changelog-full.hbs",
-      "git add CHANGELOG.md app.json package.json"
+      "git add CHANGELOG.md package.json"
     ],
     "after:release": "git push origin HEAD"
   },
