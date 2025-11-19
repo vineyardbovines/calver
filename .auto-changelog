@@ -1,10 +1,16 @@
 {
   "output": "CHANGELOG.md",
-  "template": "./template/changelog-template.hbs",
+  "template": "./template/changelog-full.hbs",
   "package": "./package.json",
   "unreleased": true,
   "commitLimit": false,
   "ignoreCommitPattern": "^release:",
   "sortCommits": "date-desc",
-  "tagPattern": "^\\d{4}\\.\\d{1,2}\\.\\d+(-[a-zA-Z0-9.-]+)?$"
+  "tagPattern": "^\\d{4}\\.\\d{1,2}\\.\\d+(-[a-zA-Z0-9.-]+)?$",
+  "replaceText": {
+    "([bB]reaking:)": "",
+    "(^[fF]eat:)": "",
+    "(^[fF]ix:)": "",
+    "(^[cC]hore:)": ""
+  }
 }

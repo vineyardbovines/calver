@@ -144,12 +144,8 @@ export function cycle(str, settings = { cycle: "auto" }) {
 }
 
 export function valid(str, settings = { cycle: "auto" }) {
-  try {
-    parse(str, { cycle: settings.cycle });
-    return str;
-  } catch (e) {
-    throw e;
-  }
+  parse(str, { cycle: settings.cycle });
+  return str;
 }
 
 function getCurrentDate() {
@@ -170,7 +166,7 @@ function getCurrentDate() {
 
     const yearStart = new Date(Date.UTC(_date.getUTCFullYear(), 0, 1));
 
-    // @ts-ignore
+    // @ts-expect-error
     return Math.ceil(((_date - yearStart) / 86400000 + 1) / 7);
   }
 }
@@ -219,7 +215,7 @@ export function parse(str, settings = { cycle: "auto" }) {
       result.month = parseInt(parts[0], 10);
       if (result.month > CALVER_NUMBER_OF_MONTHS_IN_A_YEAR) {
         throw new Error(
-          "The month " + result.month.toString() + " is not a valid month number for a year."
+          `The month ${result.month.toString()} is not a valid month number for a year.`
         );
       }
     } else if (parts.length === 2) {
@@ -227,7 +223,7 @@ export function parse(str, settings = { cycle: "auto" }) {
       result.minor = parseInt(parts[1], 10);
       if (result.month > CALVER_NUMBER_OF_MONTHS_IN_A_YEAR) {
         throw new Error(
-          "The month " + result.month.toString() + " is not a valid month number for a year."
+          `The month ${result.month.toString()} is not a valid month number for a year.`
         );
       }
     } else {
@@ -239,7 +235,7 @@ export function parse(str, settings = { cycle: "auto" }) {
       result.week = parseInt(parts[0], 10);
       if (result.week > CALVER_NUMBER_OF_WEEKS_IN_A_YEAR + 1) {
         throw new Error(
-          "The week " + result.week.toString() + " is not a valid week number for a year."
+          `The week ${result.week.toString()} is not a valid week number for a year.`
         );
       }
     } else if (parts.length === 2) {
@@ -247,7 +243,7 @@ export function parse(str, settings = { cycle: "auto" }) {
       result.minor = parseInt(parts[1], 10);
       if (result.week > CALVER_NUMBER_OF_WEEKS_IN_A_YEAR + 1) {
         throw new Error(
-          "The week " + result.week.toString() + " is not a valid week number for a year."
+          `The week ${result.week.toString()} is not a valid week number for a year.`
         );
       }
     } else {
@@ -260,13 +256,11 @@ export function parse(str, settings = { cycle: "auto" }) {
       result.day = parseInt(parts[1], 10);
       if (result.month > CALVER_NUMBER_OF_MONTHS_IN_A_YEAR) {
         throw new Error(
-          "The month " + result.month.toString() + " is not a valid month number for a year."
+          `The month ${result.month.toString()} is not a valid month number for a year.`
         );
       }
       if (result.day > CALVER_NUMBER_OF_DAYS_IN_A_MONTH) {
-        throw new Error(
-          "The day " + result.day.toString() + " is not a valid day number for a month."
-        );
+        throw new Error(`The day ${result.day.toString()} is not a valid day number for a month.`);
       }
     } else if (parts.length === 3) {
       result.month = parseInt(parts[0], 10);
@@ -274,13 +268,11 @@ export function parse(str, settings = { cycle: "auto" }) {
       result.minor = parseInt(parts[2], 10);
       if (result.month > CALVER_NUMBER_OF_MONTHS_IN_A_YEAR) {
         throw new Error(
-          "The month " + result.month.toString() + " is not a valid month number for a year."
+          `The month ${result.month.toString()} is not a valid month number for a year.`
         );
       }
       if (result.day > CALVER_NUMBER_OF_DAYS_IN_A_MONTH) {
-        throw new Error(
-          "The day " + result.day.toString() + " is not a valid day number for a month."
-        );
+        throw new Error(`The day ${result.day.toString()} is not a valid day number for a month.`);
       }
     } else {
       throw new Error("Version and cycle mismatch.");
@@ -331,13 +323,11 @@ export function parse(str, settings = { cycle: "auto" }) {
 
       if (result.month > CALVER_NUMBER_OF_MONTHS_IN_A_YEAR) {
         throw new Error(
-          "The month " + result.month.toString() + " is not a valid month number for a year."
+          `The month ${result.month.toString()} is not a valid month number for a year.`
         );
       }
       if (result.day > CALVER_NUMBER_OF_DAYS_IN_A_MONTH) {
-        throw new Error(
-          "The day " + result.day.toString() + " is not a valid day number for a month."
-        );
+        throw new Error(`The day ${result.day.toString()} is not a valid day number for a month.`);
       }
     } else {
       throw new Error("Invalid calver string: invalid date portion.");

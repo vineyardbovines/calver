@@ -1,0 +1,46 @@
+## Changelog
+
+All notable changes to this project will be documented in this file.
+
+This project adheres to [Calendar Versioning (CalVer)](https://calver.org/).
+
+{{#if unreleased}}
+### [Unreleased]
+
+{{#each unreleased}}
+  {{#commit-list commits heading="### 💥 Breaking changes" message="breaking:"}}
+    - {{subject}} [`{{shorthash}}`]({{href}})
+  {{/commit-list}}
+  {{#commit-list commits heading="### ✨ Features" message="feat:"}}
+    - {{subject}} [`{{shorthash}}`]({{href}})
+  {{/commit-list}}
+  {{#commit-list commits heading="### 🐛 Bug Fixes" message="fix:"}}
+    - {{subject}} [`{{shorthash}}`]({{href}})
+  {{/commit-list}}
+  {{#commit-list commits heading="### 🧹 Chores" message="chore:"}}
+    - {{subject}} [`{{shorthash}}`]({{href}})
+  {{/commit-list}}
+{{/each}}
+
+{{/if}}
+
+{{#each releases}}
+  {{#if href}}
+    ### [{{title}}]({{href}})
+  {{else}}
+    ### {{title}}
+  {{/if}}
+
+  {{#commit-list commits heading="### 💥 Breaking changes" message="breaking:"}}
+    - {{subject}} [`{{shorthash}}`]({{href}})
+  {{/commit-list}}
+  {{#commit-list commits heading="### ✨ Features" message="feat:"}}
+    - {{subject}} [`{{shorthash}}`]({{href}})
+  {{/commit-list}}
+  {{#commit-list commits heading="### 🐛 Bug Fixes" message="fix:"}}
+    - {{subject}} [`{{shorthash}}`]({{href}})
+  {{/commit-list}}
+  {{#commit-list commits heading="### 🧹 Chores" message="chore:"}}
+    - {{subject}} [`{{shorthash}}`]({{href}})
+  {{/commit-list}}
+{{/each}}

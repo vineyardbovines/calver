@@ -1,21 +1,28 @@
 {
   "$schema": "https://unpkg.com/release-it@19/schema/release-it.json",
   "git": {
+    "requireCleanWorkingDir": false,
+    "requireBranch": "main",
     "commit": true,
     "commitMessage": "release: ${version} [skip ci]",
     "tag": true,
     "tagName": "${version}",
-    "requireCleanWorkingDir": false
+    "changelog": "bunx auto-changelog --stdout --template ./bin/release/changelog-compact.hbs",
+    "push": false
   },
   "npm": {
     "publish": true
   },
   "github": {
     "release": true,
-    "releaseName": "${version}"
+    "releaseName": "${version}",
+    "releaseNotes": "bunx auto-changelog --stdout --template ./bin/release/changelog-compact.hbs"
   },
   "hooks": {
-    "after:bump": "bunx auto-changelog",
+    "after:bump": [
+      "bunx auto-changelog -p --template ./bin/release/changelog-template.hbs",
+      "git add CHANGELOG.md app.json package.json"
+    ],
     "after:release": "git push origin HEAD"
   },
   "plugins": {

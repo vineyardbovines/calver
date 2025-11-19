@@ -6,9 +6,9 @@ Calendar Versioning (CalVer) plugin for [release-it](https://github.com/release-
 
 ```bash
 # with package manager of choice
-ibun add -D @vineyardbovines/calver
+npm add -D @vineyardbovines/calver
 # install peers
-bun add -D release-it auto-changelog
+npm add -D release-it auto-changelog
 ```
 
 ### release-it
@@ -37,7 +37,7 @@ If publishing to NPM:
 }
 ```
 
-Available plugin options for version customization:
+For full-fledged usage reference, look at this repo's own [release-it config](./.release-it.json).
 
 **The format of version is always separated by `.` (dot)**. This is so that NPM will accept the version; versions split with other delimiters like `-` are invalid. The exception is prereleases, which are separated by `-` (dash).
 
@@ -47,20 +47,21 @@ The plugin will automatically increment the tag version if you've set `prereleas
 
 ### auto-changelog
 
-In your auto-changelog configuration, you'll have to copy/paste `template/changelog-template.hbs` into your project and then update your auto-changelog config:
+In your auto-changelog configuration, you can reference the template from this package by using the raw github URL. You'll also want to set the `tagPattern` to recognize calver tags.
 
 ```json
 // .auto-changelog
 {
-  "template": "./<path>/<to>/changelog-template.hbs",
+  "template": "https://raw.githubusercontent.com/vineyardbovines/calver/refs/heads/main/template/changelog-template.hbs",
   // important so auto-changelog recognizes calver tags
   "tagPattern": "^\\d{4}\\.\\d{1,2}\\.\\d+(-[a-zA-Z0-9.-]+)?$",
+  // sort in the date descending order
+  "sortCommits": "date-desc",
 
   // other recommended options
   "package": "./package.json",
   "unreleased": true,
   "commitLimit": false,
   "ignoreCommitPattern": "^release:",
-  "sortCommits": "date-desc",
 }
 ```
