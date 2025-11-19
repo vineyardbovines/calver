@@ -7,7 +7,7 @@
     "commitMessage": "release: ${version} [skip ci]",
     "tag": true,
     "tagName": "${version}",
-    "changelog": "bunx auto-changelog --stdout --template ./bin/release/changelog-compact.hbs",
+    "changelog": "bunx auto-changelog --stdout --template ./template/changelog-compact.hbs",
     "push": false
   },
   "npm": {
@@ -16,11 +16,11 @@
   "github": {
     "release": true,
     "releaseName": "${version}",
-    "releaseNotes": "bunx auto-changelog --stdout --template ./bin/release/changelog-compact.hbs"
+    "releaseNotes": "bunx auto-changelog --stdout --template ./template/changelog-compact.hbs"
   },
   "hooks": {
     "after:bump": [
-      "bunx auto-changelog -p --template ./bin/release/changelog-template.hbs",
+      "bunx auto-changelog -p --template ./template/changelog-template.hbs",
       "git add CHANGELOG.md app.json package.json"
     ],
     "after:release": "git push origin HEAD"
