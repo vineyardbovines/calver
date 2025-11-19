@@ -87,21 +87,21 @@ export function cycle(str, settings = { cycle: "auto" }) {
     next.minor += 1;
   } else if (cycle === "year" && version.year !== currentDate.year) {
     next.year = currentDate.year;
-    next.minor = 0;
+    next.minor = 1;
   } else if (
     cycle === "month" &&
     (version.month !== currentDate.month || version.year !== currentDate.year)
   ) {
     next.year = currentDate.year;
     next.month = currentDate.month;
-    next.minor = 0;
+    next.minor = 1;
   } else if (
     cycle === "week" &&
     (version.week !== currentDate.week || version.year !== currentDate.year)
   ) {
     next.year = currentDate.year;
     next.week = currentDate.week;
-    next.minor = 0;
+    next.minor = 1;
   } else if (
     cycle === "day" &&
     (version.day !== currentDate.day ||
@@ -111,7 +111,7 @@ export function cycle(str, settings = { cycle: "auto" }) {
     next.year = currentDate.year;
     next.month = currentDate.month;
     next.day = currentDate.day;
-    next.minor = 0;
+    next.minor = 1;
   } else {
     next.minor += 1;
   }

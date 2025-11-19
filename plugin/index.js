@@ -35,8 +35,6 @@ export default class CalVerPlugin extends Plugin {
 
   getIncrementedVersion({ latestVersion, isPreRelease, preReleaseId }) {
     const { cycle } = this.getContext();
-    console.log("clean", calver.clean(latestVersion));
-    console.log("cycle", cycle);
 
     const nextCalVer = calver.cycle(calver.clean(latestVersion), { cycle });
     console.log("nextCalVer", nextCalVer);
