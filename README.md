@@ -25,7 +25,7 @@ import { clean, suffix, prefix, initial, nt, ot, cycle, valid, toCalVerString } 
 
 In your release-it configuration:
 
-```json
+```jsonc
 // .release-it.json
 {
   "plugins": {
@@ -38,7 +38,7 @@ In your release-it configuration:
 
 If publishing to NPM:
 
-```json
+```jsonc
 {
   "npm": {
     "publish": true,
@@ -59,7 +59,7 @@ The plugin will automatically increment the tag version if you've set `prereleas
 
 In your auto-changelog configuration, you can reference the template from this package by using the raw github URL. You'll also want to set the `tagPattern` to recognize calver tags.
 
-```json
+```jsonc
 // .auto-changelog
 {
   "template": "https://raw.githubusercontent.com/vineyardbovines/calver/refs/heads/main/template/changelog-template.hbs",
